@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-rviz-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kube-rviz-api
+  template:
+    metadata:
+      labels:
+        app: kube-rviz-api
+    spec:
+      containers:
+        - name: api
+          image: srieehari/kube-rviz:latest   
+          ports:
+            - containerPort: 8000
+          env:
+            - name: POSTGRES_HOST
+              value: postgres-service
+            - name: POSTGRES_DB
+              value: rviz
+            - name: POSTGRES_USER
+              value: rviz
+            - name: POSTGRES_PASS
+              value: rvizpass
+          volumeMounts:
+            - name: uploads
+              mountPath: /data
+      volumes:
+        - name: uploads
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-rviz-api-svc
+spec:
+  selector:
+    app: kube-rviz-api
+  type: NodePort
+  ports:
+    - port: 8000
+      targetPort: 8000
+      nodePort: 30001

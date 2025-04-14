@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title> CSV-> PostgreSQL Kubernetes</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f9f9f9;
+      display: flex;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      text-align: center;
+      padding: 2rem;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 12px;
+    }
+    input[type="file"] {
+      margin-top: 1rem;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Upload lab_results.csv</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <input type="file" name="file" accept=".csv" required />
+      <br><br>
+      <button type="submit">Upload</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("uploadForm");
+  
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+  
+      try {
+        const response = await fetch("http://localhost:8000/upload", {
+          method: "POST",
+          body: formData
+        });
+  
+        if (!response.ok) throw new Error("Upload failed");
+  
+        
+        window.location.href = "http://localhost:8000/data";
+      } catch (err) {
+        alert("Upload failed. Please try again.");
+      }
+    });
+  </script>
+  
+</body>
+</html>
