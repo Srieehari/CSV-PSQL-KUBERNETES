@@ -1,8 +1,7 @@
 How to run this project:
 
+docker build -t your-dockerhub-username/kube-rviz:latest
 
-
-docker build -t your-dockerhub-username/kube-rviz:latest .
 docker push your-dockerhub-username/kube-rviz:latest
 
 kubectl apply -f k8s/postgres.yaml
